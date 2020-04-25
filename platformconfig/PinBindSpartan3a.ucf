@@ -1,8 +1,8 @@
-CONFIG VCCAUX = "3.3" ;
- 
+CONFIG VCCAUX = "3.3";
+
 # Clock 12 MHz
 NET "Clk"                LOC = P129  | IOSTANDARD = LVCMOS33 | PERIOD = 12MHz;
- 
+
 NET "LED[0]"             LOC = P46   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 NET "LED[1]"             LOC = P47   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
 NET "LED[2]"             LOC = P48   | IOSTANDARD = LVCMOS33 | SLEW = SLOW | DRIVE = 12;
