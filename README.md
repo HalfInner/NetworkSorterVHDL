@@ -4,16 +4,16 @@ Empty description FPGA. VHDL
 ## N5 network overview
 
 ```
-o--^--------^--^-----------o
-   |        |  |
-o--v--------|--|--^--^--^--o
-            |  |  |  |  |
-o-----^--^--|--v--|--|--v--o
-      |  |  |     |  |
-o--^--|--v--v-----|--v-----o
-   |  |           |
-o--v--v-----------v--------o
-
+[0] o--^--------^--^-----------o
+       |        |  |
+[1] o--v--------|--|--^--^--^--o
+                |  |  |  |  |
+[2] o-----^--^--|--v--|--|--v--o
+          |  |  |     |  |
+[3] o--^--|--v--v-----|--v-----o
+       |  |           |
+[4] o--v--v-----------v--------o
+```
 There are 9 comparators in this network,
 grouped into 6 parallel operations.
 
@@ -25,5 +25,5 @@ grouped into 6 parallel operations.
 [[1,2]]
 
 This is graphed in 8 columns.
-```
+
 
