@@ -3,7 +3,7 @@ Empty description FPGA. VHDL
 
 ## N5 network overview
 
-'''
+```
 o--^--------^--^-----------o
    |        |  |
 o--v--------|--|--^--^--^--o
@@ -25,5 +25,5 @@ grouped into 6 parallel operations.
 [[1,2]]
 
 This is graphed in 8 columns.
-'''
+```
 
