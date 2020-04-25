@@ -53,7 +53,7 @@ begin
   process (Clk) is
   begin
 
-    if (Clk'event and Clk = '1') then
+    if (CLK'event and CLK = '1') then
       if (counter >= counter_max) then
         counter      <= counter xor counter;
         blinking_raw <= not blinking_raw;
