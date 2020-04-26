@@ -18,7 +18,8 @@ library ieee;
 
 entity UART_RX is
   generic (
-    G_CLKS_PER_BIT : integer := 115     -- Needs to be set correctly
+    --G_CLKS_PER_BIT : integer := 1250     -- Needs to be set correctly
+    G_CLKS_PER_BIT : integer := 2     -- Needs to be set correctly
   );
   port (
     I_CLK       : in    std_logic;
@@ -42,7 +43,7 @@ architecture RTL of UART_RX is
 
   signal r_clk_count : integer range 0 to g_CLKS_PER_BIT - 1 := 0;
   signal r_bit_index : integer range 0 to 7 := 0;  -- 8 Bits Total
-  signal r_rx_byte   : std_logic_vector(7 downto 0) := (others => '0');
+  signal r_rx_byte   : std_logic_vector(7 downto 0);
   signal r_rx_dv     : std_logic := '0';
 
 begin
@@ -50,7 +51,7 @@ begin
   -- Purpose: Double-register the incoming data.
   -- This allows it to be used in the UART RX Clock Domain.
   -- (It removes problems caused by metastabiliy)
-  P_SAMPLE : process (i_Clk) is
+  P_SAMPLE : process (i_Clk, I_RX_SERIAL) is
   begin
 
     if (i_Clk'event and i_Clk = '1') then
@@ -63,6 +64,9 @@ begin
   -- Purpose: Control RX state machine
   P_UART_RX : process (i_Clk) is
   begin
+
+    o_RX_DV   <= r_rx_dv;
+    o_RX_Byte <= r_rx_byte;
 
     if (i_Clk'event and i_Clk = '1') then
 
@@ -84,6 +88,7 @@ begin
           if (r_clk_count = (g_CLKS_PER_BIT - 1) / 2) then
             if (r_rx_data = '0') then
               r_clk_count <= 0;           -- reset counter since we found the middle
+              r_rx_byte   <= X"00";
               r_sm_main   <= s_RX_Data_Bits;
             else
               r_sm_main   <= s_Idle;
@@ -137,8 +142,5 @@ begin
     end if;
 
   end process P_UART_RX;
-
-  o_RX_DV   <= r_rx_dv;
-  o_RX_Byte <= r_rx_byte;
 
 end architecture RTL;
