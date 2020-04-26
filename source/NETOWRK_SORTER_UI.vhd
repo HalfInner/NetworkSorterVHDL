@@ -69,7 +69,6 @@ architecture BEHAVIORAL of NETOWRK_SORTER_UI is
 
   signal sorter_running     : std_logic := '1';
 
-  signal tx_running_clock   : std_logic := '0';
   signal rx_running_clock   : std_logic := '0';
   signal rx_uart_clk        : std_logic := '0';
 
@@ -108,15 +107,11 @@ begin
       RST               => sorter_running
     );
 
-  process (CLK, RST, UART_RX, tmp_byte, tx_done) is
+  process (CLK, RST, UART_RX, tmp_byte) is
 
     variable counter : integer := 0;
 
   begin
-
-    if (tx_done'event and tx_done = '1') then
-      r_transmit_done <= '1';
-    end if;
 
     LED_CONTROL <= NOT UART_RX;
     rx_uart_clk <= CLK and rx_running_clock;
@@ -142,10 +137,11 @@ begin
             i_bus(3 downto 0) <= tmp_byte(3 downto 0);          -- fill 4 LSB
             counter := counter + 1;
           end if;
-          if (counter = 4) then
+          if (counter = 5) then
             counter := 0;
 
             rx_running_clock <= '0';
+            sorter_running   <= '0';
             fsm_ui           <= SORT;
           else
             fsm_ui <= READ_VALUE;
@@ -156,7 +152,6 @@ begin
           sorter_running <= '0';
           if (counter > 6) then
             sorter_running   <= '1';
-            tx_running_clock <= '1';
             counter := 0;
             r_bus  <= o_bus;
             fsm_ui <= WRITE_VALUE;
@@ -165,13 +160,15 @@ begin
           end if;
 
         when WRITE_VALUE =>
-          if (r_transmit_done = '1') then
+
+          if (r_transmit_done = '0' and tx_done = '1') then
+            r_transmit_done <= '1';
+          elsif (r_transmit_done = '1' and tx_done = '0') then
             r_transmit_done <= '0';
             counter := counter + 1;
           end if;
 
-          if (counter = 4) then
-            tx_running_clock <= '1';
+          if (counter = 5) then
             fsm_ui           <= INIT;
           end if;
 
