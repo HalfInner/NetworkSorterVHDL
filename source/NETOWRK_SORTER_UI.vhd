@@ -117,7 +117,7 @@ begin
     LED_CONTROL <= NOT UART_RX;
     rx_uart_clk <= CLK and rx_running_clock;
 
-    if (RST = '1') then
+    if (RST = '0') then
       tx_dv_off        <= '0';
       sorter_running   <= '1';
       rx_running_clock <= '0';
