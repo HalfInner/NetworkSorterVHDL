@@ -84,7 +84,8 @@ begin
     );
 
   uart_rx_module : entity work.UART_RX port map (
-      I_CLK       => rx_uart_clk,
+      --      I_CLK       => rx_uart_clk,
+      I_CLK       => CLK,
       I_RX_SERIAL => UART_RX,
       O_RX_DV     => receive_done,
       O_RX_BYTE   => tmp_byte
@@ -169,6 +170,7 @@ begin
           end if;
 
           if (counter = 5) then
+            tx_dv_off        <= '0';
             fsm_ui           <= INIT;
           end if;
 
