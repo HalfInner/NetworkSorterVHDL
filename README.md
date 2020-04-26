@@ -1,6 +1,6 @@
 # Network Sorter VHDL
 
-Network sorter implementation for FPGA. You can sort 5 numbers of 4 bit length sort in 6 tacts of CPU. Overview and usage is over UART, but can be succesfully use as sepearate module. Many serial input with a gap is possible, thus we supports continous sorting.
+Network sorter implementation for FPGA. Sorts 5 numbers of 4 bit length sort in 6 tacts of CPU. Overview and usage is over UART, but can be succesfully use as sepearate module. Many serial input with a gap is possible, thus we supports continous sorting.
 
 ## N5 network overview
 
@@ -70,8 +70,8 @@ sudo python3.7$>  ~/Programming/Utils/uart.py
 ## Running the tests
 
 Two test benches are included
-	* for Network Sorter 
-	* for UI -- *Low quaility*
+ * for Network Sorter
+ * for UI -- *Low quaility*
 
 ## Author
 
