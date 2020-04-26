@@ -53,7 +53,6 @@ architecture BEHAVIORAL of NETOWRK_SORTER_UI is
 
   signal fsm_ui           : fsm_ui_type := INIT;
 
-  --  signal blinking_raw : std_logic_vector(7 downto 0) := "00000000";
   signal tx_dv_off        : std_logic;
   signal tx_byte          : std_logic_vector(7 downto 0);
   signal tx_active        : std_logic;
@@ -61,9 +60,12 @@ architecture BEHAVIORAL of NETOWRK_SORTER_UI is
 
   signal tmp_byte         : std_logic_vector(7 downto 0);
   signal i_bus            : std_logic_vector(19 downto 0) := X"00000";
-  signal o_bus            : std_logic_vector(19 downto 0) := X"00000";
+  signal o_bus            : std_logic_vector(19 downto 0);
+  signal r_bus            : std_logic_vector(19 downto 0) := X"00000";
 
   signal receive_done     : std_logic;
+  
+  signal r_transmit_done    : std_logic := '0';
 
   signal sorter_running   : std_logic := '1';
 
@@ -106,11 +108,15 @@ begin
       RST               => sorter_running
     );
 
-  process (CLK, RST, UART_RX, tmp_byte) is
+
+  process (CLK, RST, UART_RX, tmp_byte, tx_done) is
 
     variable counter : integer := 0;
 
   begin
+    if rising_edge(tx_done) then
+      r_transmit_done <= '1';
+    end if;
 
     LED_CONTROL <= NOT UART_RX;
     rx_uart_clk <= CLK and rx_running_clock;
@@ -120,7 +126,6 @@ begin
       sorter_running   <= '1';
       rx_running_clock <= '0';
       counter := 0;
-      tmp_byte  <= X"00";
       fsm_ui    <= INIT;
     elsif (CLK'event and CLK = '1') then
 
@@ -128,8 +133,9 @@ begin
 
         when INIT =>
           counter := 0;
-          fsm_ui           <= READ_VALUE;
           rx_running_clock <= '1';
+          counter := 0;
+          fsm_ui           <= READ_VALUE;
         when READ_VALUE =>
           if (receive_done = '1') then
             i_bus             <= i_bus(19 downto 4) & X"0"; -- shift left - problem with shl
@@ -138,37 +144,48 @@ begin
           end if;
           if (counter = 4) then
             counter := 0;
+            
+            rx_running_clock <= '0';
             fsm_ui <= SORT;
+          else            
+            fsm_ui <= READ_VALUE;
           end if;
 
         when SORT =>
           -- SORTING
           sorter_running <= '0';
-          counter := counter + 1;
           if (counter > 6) then
+            sorter_running <= '1';
             tx_running_clock <= '1';
             counter := 0;
+            r_bus <= o_bus;
             fsm_ui <= WRITE_VALUE;
-          end if;
-        when WRITE_VALUE =>
-          sorter_running <= '1';
-          if (tx_dv_off = '0' and tx_active = '0') then
-            tx_byte <= X"0" & o_bus(19 downto 16);
-            o_bus   <= o_bus(19 downto 4) & X"0";           -- shift left - problem with shl
-            --            o_bus <= std_logic_vector(shift_left(unsigned(o_bus), 4));
-            tx_dv_off <= '1';
-          else
-            tx_dv_off <= '0';
-          end if;
-
-          if (tx_done = '1') then
+          else 
             counter := counter + 1;
           end if;
-
+          
+        when WRITE_VALUE =>
+          if (r_transmit_done = '1') then
+            r_transmit_done <= '0';
+            counter := counter + 1;
+          end if;
+          
           if (counter = 4) then
             tx_running_clock <= '1';
             fsm_ui           <= INIT;
           end if;
+          
+          if (tx_active = '1') then
+            tx_dv_off <= '0';
+            fsm_ui <= WRITE_VALUE;
+          else            
+            if (tx_dv_off = '0') then
+              tx_byte <= X"0" & r_bus(19 downto 16);
+              r_bus   <= r_bus(19 downto 4) & X"0";           -- shift left - problem with shl
+              tx_dv_off <= '1';
+            end if;
+          end if;
+          
         when others =>
           fsm_ui <= INIT;
 

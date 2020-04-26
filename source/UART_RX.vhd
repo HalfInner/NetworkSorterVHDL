@@ -57,16 +57,16 @@ begin
     if (i_Clk'event and i_Clk = '1') then
       r_rx_data_r <= i_RX_Serial;
       r_rx_data   <= r_rx_data_r;
+      o_RX_DV   <= r_rx_dv;
+      o_RX_Byte <= r_rx_byte;
     end if;
 
   end process P_SAMPLE;
 
   -- Purpose: Control RX state machine
-  P_UART_RX : process (i_Clk) is
+  P_UART_RX : process (i_Clk, I_RX_SERIAL) is
   begin
 
-    o_RX_DV   <= r_rx_dv;
-    o_RX_Byte <= r_rx_byte;
 
     if (i_Clk'event and i_Clk = '1') then
 
