@@ -80,7 +80,7 @@ begin
 
       case fsm_sorter is
 
-        when WAIT_FOR_INPUT =>
+        when WAIT_FOR_INPUT => -- read input
           v0_raw := to_integer(unsigned(VALUE_0));
           v1_raw := to_integer(unsigned(VALUE_1));
           v2_raw := to_integer(unsigned(VALUE_2));
@@ -88,7 +88,7 @@ begin
           v4_raw := to_integer(unsigned(VALUE_4));
           fsm_sorter <= SORT_PART_1;
 
-        when SORT_PART_1 => -- [[0,1],[3,4]]
+        when SORT_PART_1 =>    -- [[0,1],[3,4]]
           if (v0_raw > v1_raw) then
             tmp    := v0_raw;
             v0_raw := v1_raw;
@@ -101,7 +101,7 @@ begin
           end if;
           fsm_sorter <= SORT_PART_2;
 
-        when SORT_PART_2 => -- [[2,4]]
+        when SORT_PART_2 =>    -- [[2,4]]
           if (v2_raw > v4_raw) then
             tmp    := v2_raw;
             v2_raw := v4_raw;
@@ -109,7 +109,7 @@ begin
           end if;
           fsm_sorter <= SORT_PART_3;
 
-        when SORT_PART_3 => -- [[2,3],[1,4]]
+        when SORT_PART_3 =>    -- [[2,3],[1,4]]
           if (v2_raw > v3_raw) then
             tmp    := v2_raw;
             v2_raw := v3_raw;
@@ -122,7 +122,7 @@ begin
           end if;
           fsm_sorter <= SORT_PART_4;
 
-        when SORT_PART_4 => -- [[0,3]]
+        when SORT_PART_4 =>    -- [[0,3]]
           if (v0_raw > v3_raw) then
             tmp    := v0_raw;
             v0_raw := v3_raw;
@@ -130,7 +130,7 @@ begin
           end if;
           fsm_sorter <= SORT_PART_5;
 
-        when SORT_PART_5 => -- [[0,2],[1,3]]
+        when SORT_PART_5 =>    -- [[0,2],[1,3]]
           if (v0_raw > v2_raw) then
             tmp    := v0_raw;
             v0_raw := v2_raw;
@@ -143,14 +143,14 @@ begin
           end if;
           fsm_sorter <= SORT_PART_6;
 
-        when SORT_PART_6 => -- [[1,2]]
+        when SORT_PART_6 =>    -- [[1,2]]
           if (v1_raw > v2_raw) then
             tmp    := v1_raw;
             v1_raw := v2_raw;
             v2_raw := tmp;
           end if;
           fsm_sorter <= FINISHED;
-        when FINISHED =>
+        when FINISHED =>       -- write input
           VALUE_SORT_0 <= STD_LOGIC_VECTOR(to_unsigned(v0_raw, VALUE_SORT_0'length));
           VALUE_SORT_1 <= STD_LOGIC_VECTOR(to_unsigned(v1_raw, VALUE_SORT_1'length));
           VALUE_SORT_2 <= STD_LOGIC_VECTOR(to_unsigned(v2_raw, VALUE_SORT_2'length));
