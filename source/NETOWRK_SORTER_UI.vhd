@@ -169,7 +169,6 @@ begin
             counter := counter + 1;
           end if;
 
-          
           if (counter = 5) then
             tx_dv_off        <= '0';
             fsm_ui           <= INIT;
@@ -180,8 +179,8 @@ begin
             fsm_ui    <= WRITE_VALUE;
           elsif (tx_dv_off = '0') then
             tx_byte   <= X"0" & r_bus(19 downto 16);
-            r_bus     <= r_bus(15 downto 0) & X"0";           -- shift left - problem with shl
-            if (counter < 5) then 
+            r_bus     <= r_bus(15 downto 0) & X"0";             -- shift left - problem with shl
+            if (counter < 5) then
               tx_dv_off <= '1';
             end if;
           end if;

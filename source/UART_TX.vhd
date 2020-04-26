@@ -20,7 +20,7 @@ entity UART_TX is
   generic (
     -- 12MHz / 9600 baudrate
     G_CLKS_PER_BIT : integer := 1250     -- Needs to be set correctly
---        G_CLKS_PER_BIT : integer := 3     -- Needs to be set correctly
+    --        G_CLKS_PER_BIT : integer := 3     -- Needs to be set correctly
   );
   port (
     I_CLK       : in    std_logic;
