@@ -138,7 +138,7 @@ begin
           fsm_ui           <= READ_VALUE;
         when READ_VALUE =>
           if (receive_done = '1') then
-            i_bus             <= i_bus(19 downto 4) & X"0";     -- shift left - problem with shl
+            i_bus             <= i_bus(15 downto 0) & X"0";     -- shift left - problem with shl
             i_bus(3 downto 0) <= tmp_byte(3 downto 0);          -- fill 4 LSB
             counter := counter + 1;
           end if;
@@ -181,7 +181,7 @@ begin
           else
             if (tx_dv_off = '0') then
               tx_byte   <= X"0" & r_bus(19 downto 16);
-              r_bus     <= r_bus(19 downto 4) & X"0";           -- shift left - problem with shl
+              r_bus     <= r_bus(15 downto 0) & X"0";           -- shift left - problem with shl
               tx_dv_off <= '1';
             end if;
           end if;
