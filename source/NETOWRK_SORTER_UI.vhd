@@ -151,7 +151,7 @@ begin
         when SORT =>
           -- SORTING
           sorter_running <= '0';
-          if (counter > 6) then
+          if (counter > 10) then
             sorter_running   <= '1';
             counter := 0;
             r_bus  <= o_bus;
@@ -169,6 +169,7 @@ begin
             counter := counter + 1;
           end if;
 
+          
           if (counter = 5) then
             tx_dv_off        <= '0';
             fsm_ui           <= INIT;
@@ -177,10 +178,10 @@ begin
           if (tx_active = '1') then
             tx_dv_off <= '0';
             fsm_ui    <= WRITE_VALUE;
-          else
-            if (tx_dv_off = '0') then
-              tx_byte   <= X"0" & r_bus(19 downto 16);
-              r_bus     <= r_bus(15 downto 0) & X"0";           -- shift left - problem with shl
+          elsif (tx_dv_off = '0') then
+            tx_byte   <= X"0" & r_bus(19 downto 16);
+            r_bus     <= r_bus(15 downto 0) & X"0";           -- shift left - problem with shl
+            if (counter < 5) then 
               tx_dv_off <= '1';
             end if;
           end if;
