@@ -1,6 +1,6 @@
-# Network Sorter VHDL
+# Combinational Network Sorter VHDL
 
-Network sorter implementation for FPGA. Sorts 5 numbers of 4 bit length sort in 6 tacts of CPU. Overview and usage is over UART, but can be succesfully use as sepearate module. Many serial input with a gap is possible, thus we supports continous sorting.
+Network sorter implementation for FPGA. Sorts 5 numbers of 4 bit length sort in less than 1 tacts of CPU. Overview and usage is over UART, but can be succesfully use as sepearate module. Many serial input with a gap is possible, thus we supports continous sorting.
 
 ## N5 network overview
 
