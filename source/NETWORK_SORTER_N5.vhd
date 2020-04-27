@@ -51,120 +51,95 @@ end entity NETWORK_SORTER_N5;
 
 architecture BEHAVIORAL of NETWORK_SORTER_N5 is
 
-  type fsm_sorter_type is (
-    WAIT_FOR_INPUT,
-    SORT_PART_1, SORT_PART_2, SORT_PART_3, SORT_PART_4, SORT_PART_5, SORT_PART_6,
-    FINISHED,
-    UNDEFINED
+    signal w_comparator_0_level_0_3 : std_logic_vector(3 downto 0);
+    signal w_comparator_0_level_3_4 : std_logic_vector(3 downto 0);
+    
+    signal w_comparator_1_level_0_2 : std_logic_vector(3 downto 0);
+    signal w_comparator_1_level_2_4 : std_logic_vector(3 downto 0);
+    signal w_comparator_1_level_4_5 : std_logic_vector(3 downto 0);
+    
+    signal w_comparator_2_level_1_2 : std_logic_vector(3 downto 0);
+    signal w_comparator_2_level_2_4 : std_logic_vector(3 downto 0);
+    signal w_comparator_2_level_4_5 : std_logic_vector(3 downto 0);
+    
+    signal w_comparator_3_level_0_2 : std_logic_vector(3 downto 0);
+    signal w_comparator_3_level_2_3 : std_logic_vector(3 downto 0);
+    signal w_comparator_3_level_3_4 : std_logic_vector(3 downto 0);
+    
+    signal w_comparator_4_level_0_1 : std_logic_vector(3 downto 0);
+    signal w_comparator_4_level_1_2 : std_logic_vector(3 downto 0);
+ 
+    
+begin
+  -- level 0
+  comparator_0_1_level_0 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => VALUE_0,
+    I_VALUE_B => VALUE_1,
+    O_MIN => w_comparator_0_level_0_3,
+    O_MAX => w_comparator_1_level_0_2
+  );
+  comparator_3_4_level_0 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => VALUE_3,
+    I_VALUE_B => VALUE_4,
+    O_MIN => w_comparator_3_level_0_2,
+    O_MAX => w_comparator_4_level_0_1
+  );
+  
+  -- level 1
+  comparator_2_4_level_1 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => VALUE_2,
+    I_VALUE_B => w_comparator_4_level_0_1,
+    O_MIN => w_comparator_2_level_1_2,
+    O_MAX => w_comparator_4_level_1_2
+  );
+  
+  -- level 2
+  comparator_2_3_level_2 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_2_level_1_2,
+    I_VALUE_B => w_comparator_3_level_0_2,
+    O_MIN => w_comparator_2_level_2_4,
+    O_MAX => w_comparator_3_level_2_3
+  );
+  
+  comparator_1_4_level_2 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_1_level_0_2,
+    I_VALUE_B => w_comparator_4_level_1_2,
+    O_MIN => w_comparator_1_level_2_4,
+    O_MAX => VALUE_SORT_4
   );
 
-  signal fsm_sorter : fsm_sorter_type;
-
-  shared variable v0_raw : integer;
-  shared variable v1_raw : integer;
-  shared variable v2_raw : integer;
-  shared variable v3_raw : integer;
-  shared variable v4_raw : integer;
-
-begin
-
-  process (CLK, RST) is
-
-    variable tmp : integer;
-
-  begin
-
-    if (RST = '1') then
-      fsm_sorter <= WAIT_FOR_INPUT;
-    elsif (CLK'event and CLK = '1') then
-
-      case fsm_sorter is
-
-        when WAIT_FOR_INPUT => -- read input
-          v0_raw := to_integer(unsigned(VALUE_0));
-          v1_raw := to_integer(unsigned(VALUE_1));
-          v2_raw := to_integer(unsigned(VALUE_2));
-          v3_raw := to_integer(unsigned(VALUE_3));
-          v4_raw := to_integer(unsigned(VALUE_4));
-          fsm_sorter <= SORT_PART_1;
-
-        when SORT_PART_1 =>    -- [[0,1],[3,4]]
-          if (v0_raw > v1_raw) then
-            tmp    := v0_raw;
-            v0_raw := v1_raw;
-            v1_raw := tmp;
-          end if;
-          if (v3_raw > v4_raw) then
-            tmp    := v3_raw;
-            v3_raw := v4_raw;
-            v4_raw := tmp;
-          end if;
-          fsm_sorter <= SORT_PART_2;
-
-        when SORT_PART_2 =>    -- [[2,4]]
-          if (v2_raw > v4_raw) then
-            tmp    := v2_raw;
-            v2_raw := v4_raw;
-            v4_raw := tmp;
-          end if;
-          fsm_sorter <= SORT_PART_3;
-
-        when SORT_PART_3 =>    -- [[2,3],[1,4]]
-          if (v2_raw > v3_raw) then
-            tmp    := v2_raw;
-            v2_raw := v3_raw;
-            v3_raw := tmp;
-          end if;
-          if (v1_raw > v4_raw) then
-            tmp    := v1_raw;
-            v1_raw := v4_raw;
-            v4_raw := tmp;
-          end if;
-          fsm_sorter <= SORT_PART_4;
-
-        when SORT_PART_4 =>    -- [[0,3]]
-          if (v0_raw > v3_raw) then
-            tmp    := v0_raw;
-            v0_raw := v3_raw;
-            v3_raw := tmp;
-          end if;
-          fsm_sorter <= SORT_PART_5;
-
-        when SORT_PART_5 =>    -- [[0,2],[1,3]]
-          if (v0_raw > v2_raw) then
-            tmp    := v0_raw;
-            v0_raw := v2_raw;
-            v2_raw := tmp;
-          end if;
-          if (v1_raw > v3_raw) then
-            tmp    := v1_raw;
-            v1_raw := v3_raw;
-            v3_raw := tmp;
-          end if;
-          fsm_sorter <= SORT_PART_6;
-
-        when SORT_PART_6 =>    -- [[1,2]]
-          if (v1_raw > v2_raw) then
-            tmp    := v1_raw;
-            v1_raw := v2_raw;
-            v2_raw := tmp;
-          end if;
-          fsm_sorter <= FINISHED;
-        when FINISHED =>       -- write input
-          VALUE_SORT_0 <= STD_LOGIC_VECTOR(to_unsigned(v0_raw, VALUE_SORT_0'length));
-          VALUE_SORT_1 <= STD_LOGIC_VECTOR(to_unsigned(v1_raw, VALUE_SORT_1'length));
-          VALUE_SORT_2 <= STD_LOGIC_VECTOR(to_unsigned(v2_raw, VALUE_SORT_2'length));
-          VALUE_SORT_3 <= STD_LOGIC_VECTOR(to_unsigned(v3_raw, VALUE_SORT_3'length));
-          VALUE_SORT_4 <= STD_LOGIC_VECTOR(to_unsigned(v4_raw, VALUE_SORT_4'length));
-          fsm_sorter   <= FINISHED;
-        when others =>
-          fsm_sorter <= UNDEFINED;
-
-      end case;
-
-    end if;
-
-  end process;
+  -- level 3
+  comparator_0_3_level_3 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_0_level_0_3,
+    I_VALUE_B => w_comparator_3_level_2_3,
+    O_MIN => w_comparator_0_level_3_4,
+    O_MAX => w_comparator_3_level_3_4
+  );
+  
+  
+  -- level 4
+  comparator_0_2_level_4 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_0_level_3_4,
+    I_VALUE_B => w_comparator_2_level_2_4,
+    O_MIN => VALUE_SORT_0,
+    O_MAX => w_comparator_2_level_4_5
+  );
+  
+  comparator_1_3_level_4 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_1_level_2_4,
+    I_VALUE_B => w_comparator_3_level_3_4,
+    O_MIN => w_comparator_1_level_4_5,
+    O_MAX => VALUE_SORT_3
+  );
+  
+  
+  -- level 5
+  comparator_1_2_level_5 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+    I_VALUE_A => w_comparator_1_level_4_5,
+    I_VALUE_B => w_comparator_2_level_4_5,
+    O_MIN => VALUE_SORT_1,
+    O_MAX => VALUE_SORT_2
+  );
 
 end architecture BEHAVIORAL;
 
