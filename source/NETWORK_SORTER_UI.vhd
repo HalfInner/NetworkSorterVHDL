@@ -146,7 +146,7 @@ begin
         when SORT =>
           -- SORTING -- waiting is unnecessary because sorting is combinantional, thus
           --            the chaning is in less than one clock.
-          r_bus <= o_bus;
+          r_bus  <= o_bus;
           fsm_ui <= WRITE_VALUE;
 
         when WRITE_VALUE =>

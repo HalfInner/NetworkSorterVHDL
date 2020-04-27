@@ -101,7 +101,7 @@ begin
     r_value_2 <= X"2";
     r_value_3 <= X"3";
     r_value_4 <= X"4";
-    wait for 10ns;    
+    wait for 10ns;
     assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
     assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
     assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;

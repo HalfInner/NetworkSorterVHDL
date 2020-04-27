@@ -1,24 +1,25 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date:    21:04:52 04/27/2020 
--- Design Name: 
--- Module Name:    NETWORK_SORTER_B4_COMPARATOR - Behavioral 
--- Project Name: 
--- Target Devices: 
--- Tool versions: 
--- Description: 
+-- Company:
+-- Engineer:
 --
--- Dependencies: 
+-- Create Date:    21:04:52 04/27/2020
+-- Design Name:
+-- Module Name:    NETWORK_SORTER_B4_COMPARATOR - Behavioral
+-- Project Name:
+-- Target Devices:
+-- Tool versions:
+-- Description:
 --
--- Revision: 
+-- Dependencies:
+--
+-- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments: 
+-- Additional Comments:
 --
 ----------------------------------------------------------------------------------
+
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+  use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -30,15 +31,22 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity NETWORK_SORTER_B4_COMPARATOR is
-    Port ( I_VALUE_A : in  STD_LOGIC_VECTOR (3 downto 0);
-           I_VALUE_B : in  STD_LOGIC_VECTOR (3 downto 0);
-           O_MIN : out  STD_LOGIC_VECTOR (3 downto 0);
-           O_MAX : out  STD_LOGIC_VECTOR (3 downto 0));
-end NETWORK_SORTER_B4_COMPARATOR;
+  port (
+    I_VALUE_A : in    std_logic_vector(3 downto 0);
+    I_VALUE_B : in    std_logic_vector(3 downto 0);
+    O_MIN     : out   std_logic_vector(3 downto 0);
+    O_MAX     : out   std_logic_vector(3 downto 0)
+  );
+end entity NETWORK_SORTER_B4_COMPARATOR;
 
-architecture Behavioral of NETWORK_SORTER_B4_COMPARATOR is
+architecture BEHAVIORAL of NETWORK_SORTER_B4_COMPARATOR is
+
 begin
-  O_MIN <= I_VALUE_A when I_VALUE_A < I_VALUE_B else I_VALUE_B;
-  O_MAX <= I_VALUE_B when I_VALUE_A < I_VALUE_B else I_VALUE_A;
-end Behavioral;
+
+  O_MIN <= I_VALUE_A when I_VALUE_A < I_VALUE_B else
+           I_VALUE_B;
+  O_MAX <= I_VALUE_B when I_VALUE_A < I_VALUE_B else
+           I_VALUE_A;
+
+end architecture BEHAVIORAL;
 

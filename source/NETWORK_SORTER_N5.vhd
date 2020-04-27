@@ -48,99 +48,94 @@ end entity NETWORK_SORTER_N5;
 
 architecture BEHAVIORAL of NETWORK_SORTER_N5 is
 
-    signal w_comparator_0_level_0_3 : std_logic_vector(3 downto 0);
-    signal w_comparator_0_level_3_4 : std_logic_vector(3 downto 0);
-    
-    signal w_comparator_1_level_0_2 : std_logic_vector(3 downto 0);
-    signal w_comparator_1_level_2_4 : std_logic_vector(3 downto 0);
-    signal w_comparator_1_level_4_5 : std_logic_vector(3 downto 0);
-    
-    signal w_comparator_2_level_1_2 : std_logic_vector(3 downto 0);
-    signal w_comparator_2_level_2_4 : std_logic_vector(3 downto 0);
-    signal w_comparator_2_level_4_5 : std_logic_vector(3 downto 0);
-    
-    signal w_comparator_3_level_0_2 : std_logic_vector(3 downto 0);
-    signal w_comparator_3_level_2_3 : std_logic_vector(3 downto 0);
-    signal w_comparator_3_level_3_4 : std_logic_vector(3 downto 0);
-    
-    signal w_comparator_4_level_0_1 : std_logic_vector(3 downto 0);
-    signal w_comparator_4_level_1_2 : std_logic_vector(3 downto 0);
-    
+  signal w_comparator_0_level_0_3 : std_logic_vector(3 downto 0);
+  signal w_comparator_0_level_3_4 : std_logic_vector(3 downto 0);
+
+  signal w_comparator_1_level_0_2 : std_logic_vector(3 downto 0);
+  signal w_comparator_1_level_2_4 : std_logic_vector(3 downto 0);
+  signal w_comparator_1_level_4_5 : std_logic_vector(3 downto 0);
+
+  signal w_comparator_2_level_1_2 : std_logic_vector(3 downto 0);
+  signal w_comparator_2_level_2_4 : std_logic_vector(3 downto 0);
+  signal w_comparator_2_level_4_5 : std_logic_vector(3 downto 0);
+
+  signal w_comparator_3_level_0_2 : std_logic_vector(3 downto 0);
+  signal w_comparator_3_level_2_3 : std_logic_vector(3 downto 0);
+  signal w_comparator_3_level_3_4 : std_logic_vector(3 downto 0);
+
+  signal w_comparator_4_level_0_1 : std_logic_vector(3 downto 0);
+  signal w_comparator_4_level_1_2 : std_logic_vector(3 downto 0);
+
 begin
 
   -- level 0
   comparator_0_1_level_0 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => I_VALUE_0,
-    I_VALUE_B => I_VALUE_1,
-    O_MIN => w_comparator_0_level_0_3,
-    O_MAX => w_comparator_1_level_0_2
-  );
-  
+      I_VALUE_A => I_VALUE_0,
+      I_VALUE_B => I_VALUE_1,
+      O_MIN     => w_comparator_0_level_0_3,
+      O_MAX     => w_comparator_1_level_0_2
+    );
+
   comparator_3_4_level_0 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => I_VALUE_3,
-    I_VALUE_B => I_VALUE_4,
-    O_MIN => w_comparator_3_level_0_2,
-    O_MAX => w_comparator_4_level_0_1
-  );
-  
- 
+      I_VALUE_A => I_VALUE_3,
+      I_VALUE_B => I_VALUE_4,
+      O_MIN     => w_comparator_3_level_0_2,
+      O_MAX     => w_comparator_4_level_0_1
+    );
+
   -- level 1
   comparator_2_4_level_1 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => I_VALUE_2,
-    I_VALUE_B => w_comparator_4_level_0_1,
-    O_MIN => w_comparator_2_level_1_2,
-    O_MAX => w_comparator_4_level_1_2
-  );
-  
-  
+      I_VALUE_A => I_VALUE_2,
+      I_VALUE_B => w_comparator_4_level_0_1,
+      O_MIN     => w_comparator_2_level_1_2,
+      O_MAX     => w_comparator_4_level_1_2
+    );
+
   -- level 2
   comparator_2_3_level_2 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_2_level_1_2,
-    I_VALUE_B => w_comparator_3_level_0_2,
-    O_MIN => w_comparator_2_level_2_4,
-    O_MAX => w_comparator_3_level_2_3
-  );
-  
-  comparator_1_4_level_2 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_1_level_0_2,
-    I_VALUE_B => w_comparator_4_level_1_2,
-    O_MIN => w_comparator_1_level_2_4,
-    O_MAX => O_VALUE_SORT_4
-  );
+      I_VALUE_A => w_comparator_2_level_1_2,
+      I_VALUE_B => w_comparator_3_level_0_2,
+      O_MIN     => w_comparator_2_level_2_4,
+      O_MAX     => w_comparator_3_level_2_3
+    );
 
+  comparator_1_4_level_2 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
+      I_VALUE_A => w_comparator_1_level_0_2,
+      I_VALUE_B => w_comparator_4_level_1_2,
+      O_MIN     => w_comparator_1_level_2_4,
+      O_MAX     => O_VALUE_SORT_4
+    );
 
   -- level 3
   comparator_0_3_level_3 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_0_level_0_3,
-    I_VALUE_B => w_comparator_3_level_2_3,
-    O_MIN => w_comparator_0_level_3_4,
-    O_MAX => w_comparator_3_level_3_4
-  );
-  
-  
+      I_VALUE_A => w_comparator_0_level_0_3,
+      I_VALUE_B => w_comparator_3_level_2_3,
+      O_MIN     => w_comparator_0_level_3_4,
+      O_MAX     => w_comparator_3_level_3_4
+    );
+
   -- level 4
   comparator_0_2_level_4 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_0_level_3_4,
-    I_VALUE_B => w_comparator_2_level_2_4,
-    O_MIN => O_VALUE_SORT_0,
-    O_MAX => w_comparator_2_level_4_5
-  );
-  
+      I_VALUE_A => w_comparator_0_level_3_4,
+      I_VALUE_B => w_comparator_2_level_2_4,
+      O_MIN     => O_VALUE_SORT_0,
+      O_MAX     => w_comparator_2_level_4_5
+    );
+
   comparator_1_3_level_4 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_1_level_2_4,
-    I_VALUE_B => w_comparator_3_level_3_4,
-    O_MIN => w_comparator_1_level_4_5,
-    O_MAX => O_VALUE_SORT_3
-  );
-  
-  
+      I_VALUE_A => w_comparator_1_level_2_4,
+      I_VALUE_B => w_comparator_3_level_3_4,
+      O_MIN     => w_comparator_1_level_4_5,
+      O_MAX     => O_VALUE_SORT_3
+    );
+
   -- level 5
   comparator_1_2_level_5 : entity work.NETWORK_SORTER_B4_COMPARATOR port map (
-    I_VALUE_A => w_comparator_1_level_4_5,
-    I_VALUE_B => w_comparator_2_level_4_5,
-    O_MIN => O_VALUE_SORT_1,
-    O_MAX => O_VALUE_SORT_2
-  );
+      I_VALUE_A => w_comparator_1_level_4_5,
+      I_VALUE_B => w_comparator_2_level_4_5,
+      O_MIN     => O_VALUE_SORT_1,
+      O_MAX     => O_VALUE_SORT_2
+    );
 
 end architecture BEHAVIORAL;
 
