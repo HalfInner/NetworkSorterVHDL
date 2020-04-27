@@ -92,20 +92,17 @@ begin
     );
 
   network_sorter : entity work.NETWORK_SORTER_N5 port map (
-      VALUE_0           => i_bus(19 downto 16),
-      VALUE_1           => i_bus(15 downto 12),
-      VALUE_2           => i_bus(11 downto 8),
-      VALUE_3           => i_bus(7 downto 4),
-      VALUE_4           => i_bus(3 downto 0),
+      I_VALUE_0           => i_bus(19 downto 16),
+      I_VALUE_1           => i_bus(15 downto 12),
+      I_VALUE_2           => i_bus(11 downto 8),
+      I_VALUE_3           => i_bus(7 downto 4),
+      I_VALUE_4           => i_bus(3 downto 0),
 
-      VALUE_SORT_0      => o_bus(19 downto 16),
-      VALUE_SORT_1      => o_bus(15 downto 12),
-      VALUE_SORT_2      => o_bus(11 downto 8),
-      VALUE_SORT_3      => o_bus(7 downto 4),
-      VALUE_SORT_4      => o_bus(3 downto 0),
-
-      CLK               => CLK,
-      RST               => sorter_running
+      O_VALUE_SORT_0      => o_bus(19 downto 16),
+      O_VALUE_SORT_1      => o_bus(15 downto 12),
+      O_VALUE_SORT_2      => o_bus(11 downto 8),
+      O_VALUE_SORT_3      => o_bus(7 downto 4),
+      O_VALUE_SORT_4      => o_bus(3 downto 0)
     );
 
   process (CLK, RST, UART_RX, tmp_byte) is
@@ -119,7 +116,6 @@ begin
 
     if (RST = '0') then
       tx_dv_off        <= '0';
-      sorter_running   <= '1';
       rx_running_clock <= '0';
       counter := 0;
       fsm_ui    <= INIT;
@@ -142,23 +138,16 @@ begin
             counter := 0;
 
             rx_running_clock <= '0';
-            sorter_running   <= '0';
             fsm_ui           <= SORT;
           else
             fsm_ui <= READ_VALUE;
           end if;
 
         when SORT =>
-          -- SORTING
-          sorter_running <= '0';
-          if (counter > 10) then
-            sorter_running   <= '1';
-            counter := 0;
-            r_bus  <= o_bus;
-            fsm_ui <= WRITE_VALUE;
-          else
-            counter := counter + 1;
-          end if;
+          -- SORTING -- waiting is unnecessary because sorting is combinantional, thus
+          --            the chaning is in less than one clock.
+          r_bus <= o_bus;
+          fsm_ui <= WRITE_VALUE;
 
         when WRITE_VALUE =>
 
