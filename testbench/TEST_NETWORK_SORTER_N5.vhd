@@ -42,64 +42,51 @@ architecture BEHAVIOR of TEST_NETWORK_SORTER_N5 is
 
   component NETWORK_SORTER_N5 is
     port (
-      VALUE_0      : in    std_logic_vector(3 downto 0);
-      VALUE_1      : in    std_logic_vector(3 downto 0);
-      VALUE_2      : in    std_logic_vector(3 downto 0);
-      VALUE_3      : in    std_logic_vector(3 downto 0);
-      VALUE_4      : in    std_logic_vector(3 downto 0);
+      I_VALUE_0      : in    std_logic_vector(3 downto 0);
+      I_VALUE_1      : in    std_logic_vector(3 downto 0);
+      I_VALUE_2      : in    std_logic_vector(3 downto 0);
+      I_VALUE_3      : in    std_logic_vector(3 downto 0);
+      I_VALUE_4      : in    std_logic_vector(3 downto 0);
 
-      VALUE_SORT_0 : out   std_logic_vector(3 downto 0);
-      VALUE_SORT_1 : out   std_logic_vector(3 downto 0);
-      VALUE_SORT_2 : out   std_logic_vector(3 downto 0);
-      VALUE_SORT_3 : out   std_logic_vector(3 downto 0);
-      VALUE_SORT_4 : out   std_logic_vector(3 downto 0);
-
-      CLK          : in    std_logic;
-      RST          : in    std_logic
+      O_VALUE_SORT_0 : out   std_logic_vector(3 downto 0);
+      O_VALUE_SORT_1 : out   std_logic_vector(3 downto 0);
+      O_VALUE_SORT_2 : out   std_logic_vector(3 downto 0);
+      O_VALUE_SORT_3 : out   std_logic_vector(3 downto 0);
+      O_VALUE_SORT_4 : out   std_logic_vector(3 downto 0)
     );
   end component;
 
   --Inputs
-  signal value_0      : std_logic_vector(3 downto 0) := (others => '0');
-  signal value_1      : std_logic_vector(3 downto 0) := (others => '0');
-  signal value_2      : std_logic_vector(3 downto 0) := (others => '0');
-  signal value_3      : std_logic_vector(3 downto 0) := (others => '0');
-  signal value_4      : std_logic_vector(3 downto 0) := (others => '0');
-  signal clk          : std_logic := '0';
-  signal rst          : std_logic := '0';
+  signal r_value_0      : std_logic_vector(3 downto 0) := (others => '0');
+  signal r_value_1      : std_logic_vector(3 downto 0) := (others => '0');
+  signal r_value_2      : std_logic_vector(3 downto 0) := (others => '0');
+  signal r_value_3      : std_logic_vector(3 downto 0) := (others => '0');
+  signal r_value_4      : std_logic_vector(3 downto 0) := (others => '0');
 
   --Outputs
-  signal value_sort_0 : std_logic_vector(3 downto 0);
-  signal value_sort_1 : std_logic_vector(3 downto 0);
-  signal value_sort_2 : std_logic_vector(3 downto 0);
-  signal value_sort_3 : std_logic_vector(3 downto 0);
-  signal value_sort_4 : std_logic_vector(3 downto 0);
-
-  -- Clock period definitions
-  constant clk_period : time := 10 ns;
+  signal r_value_sort_0 : std_logic_vector(3 downto 0);
+  signal r_value_sort_1 : std_logic_vector(3 downto 0);
+  signal r_value_sort_2 : std_logic_vector(3 downto 0);
+  signal r_value_sort_3 : std_logic_vector(3 downto 0);
+  signal r_value_sort_4 : std_logic_vector(3 downto 0);
 
 begin
 
   -- Instantiate the Unit Under Test (UUT)
   UUT : NETWORK_SORTER_N5
     port map (
-      VALUE_0      => value_0,
-      VALUE_1      => value_1,
-      VALUE_2      => value_2,
-      VALUE_3      => value_3,
-      VALUE_4      => value_4,
+      I_VALUE_0      => r_value_0,
+      I_VALUE_1      => r_value_1,
+      I_VALUE_2      => r_value_2,
+      I_VALUE_3      => r_value_3,
+      I_VALUE_4      => r_value_4,
 
-      VALUE_SORT_0 => value_sort_0,
-      VALUE_SORT_1 => value_sort_1,
-      VALUE_SORT_2 => value_sort_2,
-      VALUE_SORT_3 => value_sort_3,
-      VALUE_SORT_4 => value_sort_4,
-
-      CLK          => clk,
-      RST          => rst
+      O_VALUE_SORT_0 => r_value_sort_0,
+      O_VALUE_SORT_1 => r_value_sort_1,
+      O_VALUE_SORT_2 => r_value_sort_2,
+      O_VALUE_SORT_3 => r_value_sort_3,
+      O_VALUE_SORT_4 => r_value_sort_4
     );
-
-  clk <= not clk after clk_period / 2;
 
   -- Stimulus process
   STIM_PROC : process
@@ -109,82 +96,72 @@ begin
 
     -- full iteration begin
     -- sorted asceding
-    value_0 <= X"0";
-    value_1 <= X"1";
-    value_2 <= X"2";
-    value_3 <= X"3";
-    value_4 <= X"4";
-    wait for 10 ns;
-
-    rst <= '1';
-    wait for 10 ns;
-
-    rst <= '0';
-    wait for clk_period * 10;
+    r_value_0 <= X"0";
+    r_value_1 <= X"1";
+    r_value_2 <= X"2";
+    r_value_3 <= X"3";
+    r_value_4 <= X"4";
+    wait for 10ns;    
+    assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
+    assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
+    assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;
+    assert r_value_sort_3 < r_value_sort_4 report "Not sorted" severity error;
     -- full iteration end
 
     -- full iteration begin
     -- sorted descending
-    value_0 <= X"F";
-    value_1 <= X"E";
-    value_2 <= X"D";
-    value_3 <= X"C";
-    value_4 <= X"B";
-    wait for 10 ns;
-
-    rst <= '1';
-    wait for 10 ns;
-
-    rst <= '0';
-    wait for clk_period * 10;
+    r_value_0 <= X"F";
+    r_value_1 <= X"E";
+    r_value_2 <= X"D";
+    r_value_3 <= X"C";
+    r_value_4 <= X"B";
+    wait for 10ns;
+    assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
+    assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
+    assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;
+    assert r_value_sort_3 < r_value_sort_4 report "Not sorted" severity error;
     -- full iteration end
 
     -- full iteration begin
     -- first element not sorted
-    value_0 <= X"F";
-    value_1 <= X"0";
-    value_2 <= X"1";
-    value_3 <= X"2";
-    value_4 <= X"3";
-    wait for 10 ns;
-
-    rst <= '1';
-    wait for 10 ns;
-
-    rst <= '0';
-    wait for clk_period * 10;
+    r_value_0 <= X"F";
+    r_value_1 <= X"0";
+    r_value_2 <= X"1";
+    r_value_3 <= X"2";
+    r_value_4 <= X"3";
+    wait for 10ns;
+    assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
+    assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
+    assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;
+    assert r_value_sort_3 < r_value_sort_4 report "Not sorted" severity error;
     -- full iteration end
 
     -- full iteration begin
     -- last element not sorted
-    value_0 <= X"B";
-    value_1 <= X"C";
-    value_2 <= X"D";
-    value_3 <= X"E";
-    value_4 <= X"0";
-    wait for 10 ns;
-
-    rst <= '1';
-    wait for 10 ns;
-
-    rst <= '0';
-    wait for clk_period * 10;
+    r_value_0 <= X"B";
+    r_value_1 <= X"C";
+    r_value_2 <= X"D";
+    r_value_3 <= X"E";
+    r_value_4 <= X"0";
+    wait for 10ns;
+    assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
+    assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
+    assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;
+    assert r_value_sort_3 < r_value_sort_4 report "Not sorted" severity error;
     -- full iteration end
 
     -- full iteration begin
     -- shuffled
-    value_0 <= X"4";
-    value_1 <= X"2";
-    value_2 <= X"C";
-    value_3 <= X"6";
-    value_4 <= X"9";
+    r_value_0 <= X"4";
+    r_value_1 <= X"2";
+    r_value_2 <= X"C";
+    r_value_3 <= X"6";
+    r_value_4 <= X"9";
     wait for 10 ns;
-
-    rst <= '1';
-    wait for 10 ns;
-
-    rst <= '0';
-    wait for clk_period * 10;
+    assert r_value_sort_0 < r_value_sort_1 report "Not sorted" severity error;
+    assert r_value_sort_1 < r_value_sort_2 report "Not sorted" severity error;
+    assert r_value_sort_2 < r_value_sort_3 report "Not sorted" severity error;
+    assert r_value_sort_3 < r_value_sort_4 report "Not sorted" severity error;
     -- full iteration end
 
     wait;

@@ -50,11 +50,11 @@ ARCHITECTURE behavior OF TEST_NETWORK_SORTER_B4_COMPARATOR IS
     
 
    --Inputs
-   signal R_VALUE_A : std_logic_vector(3 downto 0) := (others => '0');
-   signal R_VALUE_B : std_logic_vector(3 downto 0) := (others => '0');
+   signal r_value_a : std_logic_vector(3 downto 0) := (others => '0');
+   signal r_value_b : std_logic_vector(3 downto 0) := (others => '0');
    
-   signal R_MIN : std_logic_vector(3 downto 0) := (others => '0');
-   signal R_MAX : std_logic_vector(3 downto 0) := (others => '0');
+   signal r_min : std_logic_vector(3 downto 0) := (others => '0');
+   signal r_max : std_logic_vector(3 downto 0) := (others => '0');
 
  
  
@@ -62,10 +62,10 @@ BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
    uut: NETWORK_SORTER_B4_COMPARATOR PORT MAP (
-          I_VALUE_A => R_VALUE_A,
-          I_VALUE_A => R_VALUE_B,
-          O_MIN => R_MIN,
-          O_MAX => R_MAX
+          I_VALUE_A => r_value_a,
+          I_VALUE_A => r_value_b,
+          O_MIN => r_min,
+          O_MAX => r_max
         );
 
    -- Clock process definitions
@@ -76,20 +76,20 @@ BEGIN
       -- hold reset state for 100 ns.
       wait for 100 ns;	
       
-      VALUE_B <= X"9";
-      VALUE_A <= VALUE_B;
+      r_value_b <= X"9";
+      r_value_a <= r_value_b;
       wait for 5 ns;	
-      assert MIN <= MAX report "MIN must be less or equal to MAX" severity error;
+      assert r_min <= r_max report "MIN must be less or equal to MAX" severity error;
       
-      VALUE_A <= X"2";
+      r_value_a <= X"2";
       wait for 5 ns;	
-      assert VALUE_A = MIN report "Value must MIN" severity error;
-      assert MIN <= MAX report "MIN must be less or equal to MAX" severity error;
+      assert r_value_a = MIN report "Value must MIN" severity error;
+      assert r_min <= r_max report "MIN must be less or equal to MAX" severity error;
       
-      VALUE_A <= X"C";
+      r_value_a <= X"C";
       wait for 5 ns;	      
-      assert VALUE_A = MAX report "Value must MAX" severity error;
-      assert MIN <= MAX report "MIN must be less or equal to MAX" severity error;
+      assert r_value_a = MAX report "Value must MAX" severity error;
+      assert r_min <= r_max report "MIN must be less or equal to MAX" severity error;
 
       wait;
    end process;
